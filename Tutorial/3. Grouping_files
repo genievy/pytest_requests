@@ -1,0 +1,34 @@
+Pytest позволяет нам использовать маркеры на тестовых функциях.
+Маркеры используются для установки различных функций / атрибутов для тестирования функций.
+
+Синтаксис:
+@pytest.mark.<markername>
+
+Чтобы использовать маркеры, мы должны импортировать модуль pytest в тестовый файл:
+import pytest
+
+Запуск помеченных тестов:
+pytest -m <markername> -v
+        -m <markername> / имя маркера тестов, которые должны быть выполнены.
+
+Вы можете зарегистрировать пользовательские метки в своем pytest.ini -файле следующим образом:
+
+[pytest]
+markers =
+    slow: marks tests as slow (deselect with '-m "not slow"')
+    serial
+или в вашем pyproject.toml файле так:
+
+[tool.pytest.ini_options]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "serial",
+]
+Обратите внимание, что все, что находится :после имени метки, является необязательным описанием.
+
+Кроме того, вы можете программно зарегистрировать новые маркеры в хуке pytest_configure :
+
+def pytest_configure(config):
+    config.addinivalue_line(
+        "markers", "env(name): mark test to run only on named environment"
+    )
